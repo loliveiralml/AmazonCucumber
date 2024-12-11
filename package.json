@@ -9,6 +9,7 @@
     "author": "",
     "license": "ISC",
     "devDependencies": {
+        "@cypress/snapshot": "^2.1.7",
         "cypress": "^13.6.6",
         "cypress-cucumber-preprocessor": "^4.3.1"
     },

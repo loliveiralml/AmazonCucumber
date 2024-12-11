@@ -1,29 +1,76 @@
 /// <reference types="Cypress" />
 
-import LoginElements from '../elements/LoginElements'
+import { stdout } from 'nodemon/lib/config/defaults.js'
+import LoginElements from '../elements/LogaElements'
+import baseparm from '../elements/parametros.js'
 
 
 const loginElements = new LoginElements
+const parametros = new baseparm
 
-const url = "https://cwi.com.br"
 
 class LoginPage {
     acessarSite() {
-        cy.visit(url)
+        cy.visit(parametros.basesUrl)
        
-    }
+       
+    }   
     
-    clicarbotaoAceitarCookies() {
-        cy.get(loginElements.botaoAceitarCookies()).should('exist')
-        cy.get(loginElements.botaoAceitarCookies()).click()
+    pesquisarTipoProduto() {
+        cy.get(loginElements.dropDownCardTodosProdutos()).select(parametros.tipoDropBox,{force: true});
+              
     }
-    clicarBotaoPaginaLogin() {
-        cy.get(loginElements.botaoLogin()).should('exist')
-        cy.get(loginElements.botaoLogin()).click({force: true})
+
+    pesquisarProdutosItens() {
+        
+        cy.get(loginElements.barraPesquisa()).click({force: true});
+        cy.get(loginElements.barraPesquisa()).type(parametros.prd2);
     }
-  
-    visualizarBotaoRecuperarSenha() {
-        cy.get(loginElements.botaoRecuperarSenha()).should('contain', 'Esqueceu sua senha?')
+    pesquisarProdutosValidos() {
+        
+        cy.get(loginElements.barraPesquisa()).click({force: true});
+        cy.get(loginElements.barraPesquisa()).type(parametros.prd1);
     }
+    NaoInformaProdutosValidos() {
+        
+        cy.get(loginElements.barraPesquisa()).click();
+        
+    }
+    ///********* */
+    pesquisarProdutosInvalidos() { 
+        
+        cy.get(loginElements.barraPesquisa()).click({force: true});
+        cy.get(loginElements.barraPesquisa()).type(parametros.buscaProdutoNegativo);
+    }///********* */
+
+    botaoPesquisarProdutos() {
+        cy.get(loginElements.botaoPesquisar()).click();
+    }
+
+    resultadoPesquisa(){
+       
+      cy.get(loginElements.resultadoPesquisa()).should('be.visible');
+    }
+
+    resultadoPesquisaInvalida(){
+      cy.get(loginElements.resultadoPesquisaNegativa).contains(parametros.retornoProdutoNegativo);
+    }
+
+    resultadoPesquisaTipoProduto(){
+        cy.get(loginElements.resultadoPesquisaTipoProduto).contains(parametros.retornoTipoProduto);
+      }
+
+      resultadoPesquisaTipoProdutoDescricao(){
+        cy.get(loginElements.resultadoPesquisaTipoProduto).contains(parametros.retornoTipoProduto);
+      }
+
+    paginaPrincipal(){
+        cy.url().should('eq', parametros.basesUrl);  // Verifica se a URL é exata
+      }
+
+      paginaTipoDescricao(){
+        cy.url().should('eq', parametros.baseurlItem);  // Verifica se a URL é exata
+      }
+
 }
 export default LoginPage;
